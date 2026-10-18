@@ -1,17 +1,6 @@
 {
   "name": "gamer-quantum-calculator",
   "version": "1.0.0",
-  "description": "Gamer-themed web calculator with an Operator key generation portal",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "keywords": [
-    "calculator",
-    "gamer-theme",
-    "operator-portal",
-    "key-auth"
-  ],
-  "author": "Operator",
-  "license": "MIT"
+  "description": "Gamer-themed web calculator with single access key",
+  "private": true
 }

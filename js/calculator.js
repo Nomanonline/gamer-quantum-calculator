@@ -190,11 +190,13 @@ class GamerCalculator {
 
   // --- KEY GATE / AUTHENTICATION ---
   checkAutoLogin() {
-    // 1. Check URL parameters for direct key link (e.g., ?key=XYZ-1234)
+    const SINGLE_KEY = 'thiscalculatorisdangerous';
+
+    // 1. Check URL parameters for direct key link (e.g., ?key=thiscalculatorisdangerous)
     const urlParams = new URLSearchParams(window.location.search);
     const paramKey = urlParams.get('key');
     if (paramKey) {
-      if (this.keyInput) this.keyInput.value = paramKey.toUpperCase();
+      if (this.keyInput) this.keyInput.value = paramKey;
       this.handleKeySubmission(paramKey);
       // Clean URL
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -202,15 +204,9 @@ class GamerCalculator {
     }
 
     // 2. Check current session storage
-    const activeSession = window.keysManager.getSessionKey();
-    if (activeSession) {
-      // Re-validate to ensure key wasn't revoked
-      const allKeys = window.keysManager.getAllKeys();
-      const current = allKeys.find((k) => k.id === activeSession.id || k.key === activeSession.key);
-      if (current && current.status !== 'revoked' && (!current.expiresAt || Date.now() < current.expiresAt)) {
-        this.unlockCalculator(current);
-        return;
-      }
+    if (sessionStorage.getItem('calc_unlocked') === 'true') {
+      this.unlockCalculator({ key: SINGLE_KEY });
+      return;
     }
 
     // Default: Locked
@@ -219,6 +215,7 @@ class GamerCalculator {
 
   handleKeySubmission(overrideKey = null) {
     const key = (overrideKey || (this.keyInput ? this.keyInput.value : '')).trim();
+    const SINGLE_KEY = 'thiscalculatorisdangerous';
 
     if (!key) {
       this.showFeedback('PLEASE INPUT A VALID ACCESS KEY.', 'error');
@@ -229,16 +226,14 @@ class GamerCalculator {
     this.showFeedback('QUERYING QUANTUM MAINFRAME CIPHER...', 'loading');
 
     setTimeout(() => {
-      const result = window.keysManager.validateKey(key);
-
-      if (result.valid) {
-        this.showFeedback(result.message, 'success');
+      if (key.toLowerCase() === SINGLE_KEY) {
+        this.showFeedback('AUTHENTICATION VERIFIED. QUANTUM CORE ACTIVATED.', 'success');
         window.gamerAudio.playSuccess();
         setTimeout(() => {
-          this.unlockCalculator(result.keyData);
+          this.unlockCalculator({ key: SINGLE_KEY });
         }, 600);
       } else {
-        this.showFeedback(result.reason, 'error');
+        this.showFeedback('SECURITY BREACH: Invalid key cipher.', 'error');
         window.gamerAudio.playError();
       }
     }, 400);
@@ -254,13 +249,15 @@ class GamerCalculator {
     if (this.lockSection) this.lockSection.classList.add('hidden');
     if (this.calcSection) this.calcSection.classList.remove('hidden');
 
-    if (this.keyInfoBadge && keyData) {
-      this.keyInfoBadge.innerHTML = `KEY: <span>${keyData.key}</span> (${keyData.type === 'single' ? 'SINGLE-USE' : 'AUTHORIZED'})`;
+    try { sessionStorage.setItem('calc_unlocked', 'true'); } catch (e) {}
+
+    if (this.keyInfoBadge) {
+      this.keyInfoBadge.innerHTML = `KEY: <span>AUTHORIZED</span>`;
     }
   }
 
   lockCalculator(notify = true) {
-    window.keysManager.clearSession();
+    try { sessionStorage.removeItem('calc_unlocked'); } catch (e) {}
     if (this.calcSection) this.calcSection.classList.add('hidden');
     if (this.lockSection) this.lockSection.classList.remove('hidden');
     if (this.keyInput) this.keyInput.value = '';
