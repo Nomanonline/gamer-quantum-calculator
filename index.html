@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamer Quantum Calculator // Cyber HUD</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+</head>
+<body>
+  <!-- CRT Scanline Overlay -->
+  <div class="scanlines"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="gamer-nav">
+    <div class="brand-badge">
+      <div class="brand-icon">⚡</div>
+      <div class="brand-title">QUANTUM<span>CALC</span> // MK-IV</div>
+    </div>
+    <div class="nav-actions">
+      <!-- RGB Theme Selectors -->
+      <button class="theme-pill-btn theme-cyan" data-rgb="cyan" title="Cyan RGB"></button>
+      <button class="theme-pill-btn theme-matrix" data-rgb="matrix" title="Matrix Green"></button>
+      <button class="theme-pill-btn theme-cyberpink" data-rgb="cyberpink" title="Cyber Pink"></button>
+      <button class="theme-pill-btn theme-voidpurple" data-rgb="voidpurple" title="Void Purple"></button>
+
+      <!-- Audio Mute Switch -->
+      <button id="soundToggleBtn" class="cyber-btn cyber-btn-secondary">AUDIO: ON 🔊</button>
+
+      <!-- Operator Hub Gateway Link -->
+      <a href="operator.html" class="cyber-btn">OPERATOR HUB ⚡</a>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+    <!-- ============================================== -->
+    <!-- 1. KEY GATE ACCESS LOCK SCREEN (Default view) -->
+    <!-- ============================================== -->
+    <section id="lockSection" class="lockscreen-overlay">
+      <div class="cyber-card lock-container">
+        <div class="lock-shield-icon">🛡️</div>
+        <h1 class="lock-title">CORE LOCKDOWN</h1>
+        <p class="lock-subtitle">ENTER SECURITY KEY TO ACCESS THE CALCULATOR</p>
+
+        <div class="cyber-input-wrapper">
+          <input 
+            type="text" 
+            id="keyInput" 
+            class="cyber-input" 
+            placeholder="CYBER-XXXX-XXXX" 
+            autocomplete="off" 
+            spellcheck="false"
+            maxlength="24"
+          >
+        </div>
+
+        <div id="lockFeedback" class="lock-feedback feedback-default">
+          AWAITING SECURITY CIPHER INPUT...
+        </div>
+
+        <button id="authBtn" class="cyber-btn btn-full">
+          INITIALIZE QUANTUM CORE
+        </button>
+
+        <div class="operator-link-box">
+          <span>Are you the Operator? Generate new keys in the command center:</span>
+          <a href="operator.html">⚡ OPEN OPERATOR KEY GENERATOR &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- 2. UNLOCKED GAMER CALCULATOR INTERFACE         -->
+    <!-- ============================================== -->
+    <section id="calcSection" class="calculator-section hidden">
+      <!-- Main Calculator Frame -->
+      <div class="calc-chassis">
+        <!-- Top Gamer HUD Status Bar -->
+        <div class="calc-hud-header">
+          <div class="hud-status-chip">
+            <span class="hud-pulse-dot"></span>
+            <span>SYSTEM ONLINE</span>
+          </div>
+          <div id="activeKeyBadge" class="hud-key-info">
+            KEY: <span>CYBER-ACTIVE</span>
+          </div>
+          <button id="lockOutBtn" class="cyber-btn cyber-btn-danger" style="padding: 4px 10px; font-size: 11px;">
+            LOCK / LOGOUT
+          </button>
+        </div>
+
+        <!-- High-Tech Screen Display -->
+        <div class="calc-screen-wrapper">
+          <div id="prevDisplay" class="calc-prev-expression"></div>
+          <div id="mainDisplay" class="calc-main-display">0</div>
+          <div id="powerBar" class="calc-power-bar"></div>
+        </div>
+
+        <!-- Advanced Scientific Keypad (Collapsible) -->
+        <div id="sciKeypad" class="calc-sci-keypad hidden">
+          <button class="k-btn sci-btn" data-action="sci" data-val="sqrt">√x</button>
+          <button class="k-btn sci-btn" data-action="sci" data-val="sqr">x²</button>
+          <button class="k-btn sci-btn" data-action="sci" data-val="pow">xʸ</button>
+          <button class="k-btn sci-btn" data-action="sci" data-val="pi">π</button>
+          <button class="k-btn sci-btn" data-action="sci" data-val="sin">sin</button>
+          <button class="k-btn sci-btn" data-action="sci" data-val="cos">cos</button>
+          <button class="k-btn sci-btn" data-action="sci" data-val="tan">tan</button>
+          <button class="k-btn sci-btn" data-action="sci" data-val="log">log</button>
+          <button class="k-btn sci-btn" data-action="sci" data-val="fact">n!</button>
+          <button class="k-btn sci-btn" data-action="op" data-val="(">(</button>
+          <button class="k-btn sci-btn" data-action="op" data-val=")">)</button>
+          <button class="k-btn sci-btn" data-action="op" data-val="%">%</button>
+        </div>
+
+        <!-- Standard High-Tech Keypad -->
+        <div class="calc-keypad">
+          <button id="toggleSciBtn" class="k-btn k-btn-toggle-sci">ADVANCED SCI: OFF</button>
+          <button class="k-btn clear-btn" data-action="clear">AC</button>
+          <button class="k-btn clear-btn" data-action="delete">DEL</button>
+
+          <button class="k-btn" data-action="num" data-val="7">7</button>
+          <button class="k-btn" data-action="num" data-val="8">8</button>
+          <button class="k-btn" data-action="num" data-val="9">9</button>
+          <button class="k-btn op-btn" data-action="op" data-val="/">÷</button>
+
+          <button class="k-btn" data-action="num" data-val="4">4</button>
+          <button class="k-btn" data-action="num" data-val="5">5</button>
+          <button class="k-btn" data-action="num" data-val="6">6</button>
+          <button class="k-btn op-btn" data-action="op" data-val="*">×</button>
+
+          <button class="k-btn" data-action="num" data-val="1">1</button>
+          <button class="k-btn" data-action="num" data-val="2">2</button>
+          <button class="k-btn" data-action="num" data-val="3">3</button>
+          <button class="k-btn op-btn" data-action="op" data-val="-">−</button>
+
+          <button class="k-btn" data-action="num" data-val="0">0</button>
+          <button class="k-btn" data-action="num" data-val=".">.</button>
+          <button class="k-btn equals-btn" data-action="equals">=</button>
+          <button class="k-btn op-btn" data-action="op" data-val="+">+</button>
+        </div>
+      </div>
+
+      <!-- Telemetry Combat History Sidebar -->
+      <aside class="calc-sidebar">
+        <div class="sidebar-header">
+          <span class="sidebar-title">⚡ COMPUTATION LOGS</span>
+          <button id="clearHistoryBtn" class="cyber-btn cyber-btn-secondary" style="padding: 4px 8px; font-size: 10px;">
+            PURGE
+          </button>
+        </div>
+        <div id="historyList" class="history-list">
+          <!-- Populated by JS -->
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="gamer-footer">
+    <div>QUANTUM OPERATING CORE // OPERATOR PASSCODE SECURITY ACTIVE</div>
+    <div style="margin-top: 6px;">
+      Keys can only be generated in the <a href="operator.html">Operator Hub</a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/keys.js"></script>
+  <script src="js/calculator.js"></script>
+</body>
+</html>
